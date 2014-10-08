@@ -49,6 +49,11 @@ public class PromptEmulator extends JPanel {
         };
         commands.put("dir", showDirectory);
         commands.put("ls", showDirectory);
+        commands.put("clear", new CommandListener() {
+            public void invoke(String args[]) {
+                area.setText("");
+            }
+        });
         commands.put("cd", new CommandListener() {
             public void invoke(String args[]) {
                 if (args.length <= 1) {
