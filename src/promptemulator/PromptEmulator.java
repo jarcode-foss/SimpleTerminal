@@ -493,6 +493,9 @@ public class PromptEmulator extends JPanel {
             public final void print(Object content) {
                 panel.prompt.append(content.toString());
             }
+            public final void println(Object content) {
+                panel.prompt.append(content.toString() + "\n");
+            }
         }
         class JavaSourceFromString extends SimpleJavaFileObject {
             final String code;
