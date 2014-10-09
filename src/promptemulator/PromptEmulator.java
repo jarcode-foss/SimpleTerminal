@@ -14,8 +14,11 @@ import java.lang.reflect.*;
 
 public class PromptEmulator extends JPanel {
     
+    public static final String PATH = new File(PromptEmulator.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsolutePath();
+        
     public static void main(String[] args) {
-        System.out.println(System.getProperty("java.class.path"));
+        System.out.println("Classpath: " + System.getProperty("java.class.path"));
+        System.out.println("Application path: " + PATH);
         JFrame frame = new JFrame();
         frame.setTitle("Prompt Emulator");
         frame.setSize(700, 450);
@@ -134,7 +137,7 @@ public class PromptEmulator extends JPanel {
         area.setWrapStyleWord(true);
         area.setEditable(false);
         area.setBackground(Color.DARK_GRAY);
-        area.setForeground(Color.WHITE);
+        area.setForeground(Color.GREEN);
         area.setFont(new Font(Font.MONOSPACED, 0, 12));
         field.addActionListener(new FieldListener());
         JScrollPane pane = new JScrollPane(area);
@@ -331,6 +334,8 @@ public class PromptEmulator extends JPanel {
         private final Object SCRIPT_LOCK = new Object();
         private volatile boolean active = false;
         
+        UUID id = UUID.randomUUID();
+        
         public EditorPanel() {
             
             area.setFont(new Font(Font.MONOSPACED, 1, 12));
@@ -460,7 +465,7 @@ public class PromptEmulator extends JPanel {
             JavaFileObject file = new JavaSourceFromString("Script", code);
             Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
             CompilationTask task = compiler.getTask(null, null, diagnostics,
-                    Arrays.asList("-classpath", System.getProperty("java.class.path")), null, compilationUnits);
+                    Arrays.asList("-classpath", PATH), null, compilationUnits);
             boolean success = task.call();
             for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
                 prompt.append("\n" + diagnostic.getCode());
