@@ -180,7 +180,16 @@ public class PromptEmulator extends JPanel {
                 }
             }
     }
-    
+    public void waitFor() {
+        try {
+            if (running) {
+                inputStreamThread.join();
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     public void handle(String command) {
         try {
             synchronized (LOCK) {
@@ -494,6 +503,10 @@ public class PromptEmulator extends JPanel {
             }
             public final void exec(String command, EditorPanel panel) {
                 panel.prompt.handle(command);
+                panel.prompt.waitFor();
+            }
+            public final void exec(String command) {
+                exec(command, panel);
             }
             public final void print(Object content) {
                 panel.prompt.append(content.toString());
